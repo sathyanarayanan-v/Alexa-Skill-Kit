@@ -62,7 +62,8 @@ function suggest(scheme,schemeNavMap){
 function valid(scheme,plan,option,schemeNavMap){
         if(!(plan in schemeNavMap[scheme]["plans"] )){
             const planInScheme = Object.keys(schemeNavMap[scheme]["plans"]);
-            let speechText = `${plan} does not exist on the ${scheme}. The available plan`
+            let speechText = `${plan} does not exist on the ${scheme}.`
+            
             planInScheme.forEach(function(plan,index){
                 if(index === planInScheme.length-1 && (planInScheme.length !== 1)){
                     speechText += ' and '+plan;
@@ -80,13 +81,10 @@ function valid(scheme,plan,option,schemeNavMap){
                     speechText +=  suggest(scheme,schemeNavMap)
                     return [true,speechText]
                 }
-                speechText = `${option} does not exist on the ${scheme} ${plan}. The available options are `
+                speechText = `${option} does not exist on the ${scheme} ${plan}. The N.A.V for scheme ${scheme} ${plan} `
                 optionInScheme.forEach(function(option,index){
-                    if(index === optionInScheme.length-1){
-                        speechText += ' and '+option;
-                    }else{
-                        speechText += ','+option
-                    }
+                const optionDict = schemeNavMap[scheme]["plans"][plan][option];
+                speechText += `${option} is ${optionDict["nav"]} dated on ${optionDict["date"]}`;
                 })
                 return [false,speechText]
             }else{
@@ -95,5 +93,6 @@ function valid(scheme,plan,option,schemeNavMap){
         }
     }
 const schemeNavMap = buildMap()
-const response = valid('SBI MAGNUM TAXGAIN SCHEME 1993','DIVIDEND','DIRECT',schemeNavMap)
-console.log(response[1])
+
+const isValidAndResponse = valid("ADITYA BIRLA SUN LIFE SHORT TERM OPPORTUNITIES FUND".toUpperCase(),'BONUS','REGULAR',schemeNavMap)
+console.log(isValidAndResponse[1])
